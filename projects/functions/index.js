@@ -89,9 +89,10 @@ function returnCounter(number = 0) {
 
  Пример:
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
- */
-function returnArgumentsArray(...numbers) {
+ */ 
 
+function returnArgumentsArray(...numbers) {
+  let a = 2
   return numbers
 
  }
