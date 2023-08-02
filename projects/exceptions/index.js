@@ -28,14 +28,14 @@ function isAllTrue(array, fn) {
     throw new Error('empty array');
   }
 
-  if (array.length == 0) {
+  if (array.length === 0) {
     throw new Error('empty array');
   }
-  if (array == undefined) {
+  if (!array) {
     throw new Error('empty array');
   }
 
-  if (typeof fn != 'function') {
+  if (typeof fn !== 'function') {
     throw new Error('fn is not a function');
   }
 
@@ -88,14 +88,14 @@ function isSomeTrue(array, fn) {
     throw new Error('empty array');
   }
 
-  if (array.length == 0) {
+  if (array.length === 0) {
     throw new Error('empty array');
   }
-  if (array == undefined) {
+  if (!array) {
     throw new Error('empty array');
   }
 
-  if (typeof fn != 'function') {
+  if (typeof fn !== 'function') {
     throw new Error('fn is not a function');
   }
 
@@ -131,7 +131,7 @@ function returnBadArguments(fn, ...args) {
 
   let array = []
 
-  if (typeof fn != 'function') {
+  if (typeof fn !== 'function') {
     throw new Error('fn is not a function');
   }
 
@@ -174,8 +174,8 @@ function returnBadArguments(fn, ...args) {
    console.log(calc.div(2, 2)); // выведет 2.5 (10 / 2 / 2)
    console.log(calc.div(2, 0)); // выбросит исключение, потому что один из аргументов равен 0
  */
-  //  const myCalc = calculator(10);
-  //  console.log(myCalc.sum(1, 2, 3)); 
+//  const myCalc = calculator(10);
+//  console.log(myCalc.sum(1, 2, 3)); 
 
 function calculator(number = 0) {
 
@@ -185,8 +185,8 @@ function calculator(number = 0) {
 
   let obj = {
     sum: (...args) => {
-      for (let i = 0; i < args.length; i++) {        
-        number += args[i]                
+      for (let i = 0; i < args.length; i++) {
+        number += args[i]
       }
       return number
     },
@@ -199,7 +199,7 @@ function calculator(number = 0) {
     },
     div: (...args) => {
       for (let i = 0; i < args.length; i++) {
-        if (args[i] == 0) {
+        if (args[i] === 0) {
           throw new Error('division by 0')
         }
         number /= args[i]
