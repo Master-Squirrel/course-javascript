@@ -20,7 +20,44 @@
    isAllTrue([1, 2, 3, 4, 5], n => n < 10) // вернет true (потому что все элементы массива меньше 10)
    isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false (потому что как минимум первый элемент больше 10)
  */
-function isAllTrue(array, fn) {}
+
+function isAllTrue(array, fn) {
+
+
+  if (!Array.isArray(array)) {
+    throw new Error('empty array');
+  }
+
+  if (array.length == 0) {
+    throw new Error('empty array');
+  }
+  if (array == undefined) {
+    throw new Error('empty array');
+  }
+
+  if (typeof fn != 'function') {
+    throw new Error('fn is not a function');
+  }
+
+
+  for (let i = 0; i < array.length; i++) {
+
+    let result = fn(array[i])
+
+    if (!result) {
+
+      return false;
+    }
+  }
+
+  return true;
+
+
+
+
+}
+
+
 
 /*
  Задание 2:
@@ -42,7 +79,40 @@ function isAllTrue(array, fn) {}
    isSomeTrue([1, 2, 30, 4, 5], n => n > 20) // вернет true (потому что в массиве есть хотя бы один элемент больше 20)
    isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false (потому что в массиве нет ни одного элемента больше 20)
  */
-function isSomeTrue(array, fn) {}
+
+function isSomeTrue(array, fn) {
+
+
+
+  if (!Array.isArray(array)) {
+    throw new Error('empty array');
+  }
+
+  if (array.length == 0) {
+    throw new Error('empty array');
+  }
+  if (array == undefined) {
+    throw new Error('empty array');
+  }
+
+  if (typeof fn != 'function') {
+    throw new Error('fn is not a function');
+  }
+
+
+  for (let i = 0; i < array.length; i++) {
+
+    let result = fn(array[i])
+
+    if (result) {
+
+      return true;
+    }
+  }
+
+  return false;
+
+}
 
 /*
  Задание 3:
@@ -56,7 +126,27 @@ function isSomeTrue(array, fn) {}
    - fn не является функцией (с текстом "fn is not a function")
      для проверки на функцию вам может помочь оператор typeof
  */
-function returnBadArguments() {}
+
+function returnBadArguments(fn, ...args) {
+
+  let array = []
+
+  if (typeof fn != 'function') {
+    throw new Error('fn is not a function');
+  }
+
+  for (let i = 0; i < args.length; i++) {
+
+    try {
+      fn(args[i])
+    }
+    catch (e) {
+      array.push(args[i])
+    }
+
+  }
+  return array
+}
 
 /*
  Задание 4:
@@ -84,7 +174,47 @@ function returnBadArguments() {}
    console.log(calc.div(2, 2)); // выведет 2.5 (10 / 2 / 2)
    console.log(calc.div(2, 0)); // выбросит исключение, потому что один из аргументов равен 0
  */
-function calculator(number) {}
+  //  const myCalc = calculator(10);
+  //  console.log(myCalc.sum(1, 2, 3)); 
+
+function calculator(number = 0) {
+
+  if (isNaN(number)) {
+    throw new Error('number is not a number')
+  }
+
+  let obj = {
+    sum: (...args) => {
+      for (let i = 0; i < args.length; i++) {        
+        number += args[i]                
+      }
+      return number
+    },
+
+    dif: (...args) => {
+      for (let i = 0; i < args.length; i++) {
+        number -= args[i]
+      }
+      return number
+    },
+    div: (...args) => {
+      for (let i = 0; i < args.length; i++) {
+        if (args[i] == 0) {
+          throw new Error('division by 0')
+        }
+        number /= args[i]
+      }
+      return number
+    },
+    mul: (...args) => {
+      for (let i = 0; i < args.length; i++) {
+        number *= args[i]
+      }
+      return number
+    }
+  }
+  return obj
+}
 
 /* При решении задач, постарайтесь использовать отладчик */
 
