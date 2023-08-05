@@ -1,30 +1,31 @@
-function getRandomElement(array) {
-        
-    while (1 == 1) {
-        let num = parseInt(Math.random() * 10);
-        
-        if (num >= 0 && num < array.length) {
-            index = num;
-            break
+import photosDB from './photos.json';
+import friendsDB from './friends.json';
+
+export default {
+
+    getRandomElement(array) {
+
+        if (!array.length) {
+            return null;
         }
-    }
+        
+        const num = Math.round((Math.random() * (array.length -1)));
+  
+        return array[index];
+    },
+    
+    getNextPhoto () {
 
-    return index
+        let randomFrend = this.getRandomElement(friendsDB);        
+        let photos = photosDB[randomFrend.id]
+        let randomPhoto = this.getRandomElement(photos)
+        
+    
+        return requiredFriend = {
+            randomFrend, url : photos.url            
+        }
+        
+    }
 }
 
 
-function getNextPhoto() {
-    const photosDB = require('./photos.json');
-    const friendsDB = require('./friends.json');
-    let randomFrend = getRandomElement(friendsDB);
-    
-    let photos = photosDB[randomFrend]
-    let randomPhoto = getRandomElement(photos)
-    
-
-    const requiredFriend = {
-        url : photos[randomPhoto].url,
-        friend: friendsDB[randomFrend].firstName
-    }
-    return requiredFriend
-}
