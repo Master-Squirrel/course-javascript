@@ -11,8 +11,8 @@
  */
 function forEach(array, func) {
 
-  for (let i = 0; i < array.length; i++) {
-    func(array[i], i, array)
+  for (const [ix, el] of array.entries()) {
+    func(el, ix, array)
   }
 
 }
@@ -28,14 +28,14 @@ function forEach(array, func) {
    const newArray = map([1, 2, 3], (el) => el ** 2);
    console.log(newArray); // выведет [1, 4, 9]
  */
-function map(array, func) { 
+function map(array, func) {
 
-  let result = [];
+  const result = [];
 
-  for (let i = 0; i < array.length; i++) {
-   
-    result.push ( func(array[i], i, array) )
-    
+  for (const [ix, el] of array.entries()) {
+
+    result.push(func(el,ix,array))
+
   }
 
   return result
@@ -51,25 +51,25 @@ function map(array, func) {
    console.log(sum); // выведет 6
  */
 function reduce(array, func, initial) {
-  
+
   let start = initial == null ? array[0] : initial
   let firstIndex = initial == null ? 1 : 0
 
   let result = start;
 
-    for (let i = firstIndex; i < array.length; i++) {
+  for (let i = firstIndex; i < array.length; i++) {
 
-      //console.log(`${i} - ${result} - ${array[i]}`)
-      //console.log(func(result, array[i], i, array))
-  
-      result = func(result, array[i], i, array)     
-      
-    }
-  
+    //console.log(`${i} - ${result} - ${array[i]}`)
+    //console.log(func(result, array[i], i, array))
+
+    result = func(result, array[i], i, array)
+
+  }
+
   return result
- }
+}
 
- //const sum = reduce([1, 2, 3], (all, current) => all + current, 10);
+//const sum = reduce([1, 2, 3], (all, current) => all + current, 10);
 /*
  Задание 4:
 
@@ -79,7 +79,7 @@ function reduce(array, func, initial) {
    const keys = upperProps({ name: 'Сергей', lastName: 'Петров' });
    console.log(keys) // выведет ['NAME', 'LASTNAME']
  */
-function upperProps(object) { 
+function upperProps(object) {
 
   let answer = []
   var keyNames = Object.keys(object);
@@ -88,7 +88,7 @@ function upperProps(object) {
     answer.push(keyNames[i].toUpperCase())
 
   }
-  
+
   return answer
 
 }

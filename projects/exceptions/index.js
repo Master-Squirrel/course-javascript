@@ -1,5 +1,7 @@
 /* ДЗ 3 - работа с исключениями и отладчиком */
 
+import { Exception } from "handlebars";
+
 /*
  Задание 1:
 
@@ -185,32 +187,24 @@ function calculator(number = 0) {
 
   let obj = {
     sum: (...args) => {
-      for (let i = 0; i < args.length; i++) {
-        number += args[i]
-      }
-      return number
+      return args.reduce((all, current) => all + current, number)
+
     },
 
     dif: (...args) => {
-      for (let i = 0; i < args.length; i++) {
-        number -= args[i]
-      }
-      return number
+      return args.reduce((all, current) => all - current, number)
     },
     div: (...args) => {
-      for (let i = 0; i < args.length; i++) {
-        if (args[i] === 0) {
-          throw new Error('division by 0')
-        }
-        number /= args[i]
+
+      if (args.some((a, ix) => a === 0)) {
+        throw new Exception('division by 0')
       }
-      return number
+
+      return args.reduce((all, current) => all / current, number)
+
     },
     mul: (...args) => {
-      for (let i = 0; i < args.length; i++) {
-        number *= args[i]
-      }
-      return number
+      return args.reduce((all, current) => all * current, number)
     }
   }
   return obj
