@@ -11,8 +11,10 @@
    createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
  */
 function createDivWithText(text) {
-  const elem = document.createElement('div')
-  elem.textContent = text
+  const elem = document.createElement('div');
+  elem.textContent = text;
+
+  return elem;
 }
 
 /*
@@ -49,9 +51,15 @@ function prepend(what, where) {
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
-  for ( k of where) {
-    console.log(k);
+  const answer = []
+
+  for (const node of where.children) {
+
+    if (node.nextElementSibling?.tagName === 'P') {
+      answer.push(node);
+    }
   }
+  return answer
 }
 
 /*
@@ -73,8 +81,9 @@ function findAllPSiblings(where) {
  */
 function findError(where) {
   const result = [];
+  let child = "";
 
-  for (const child of where.childNodes) {
+  for (child of where.children) {
     result.push(child.textContent);
   }
 
@@ -94,6 +103,16 @@ function findError(where) {
    должно быть преобразовано в <div></div><p></p>
  */
 function deleteTextNodes(where) {
+  let child = "";
+
+  for (child of where.childNodes) {
+
+    if (child.nodeType === 3) {
+      where.removeChild(child)
+    }
+
+  }
+
 }
 
 /*
@@ -117,8 +136,60 @@ function deleteTextNodes(where) {
    }
  */
 function collectDOMStat(root) {
-}
 
+  let obj = {
+    tags: {},
+    classes: {},
+    texts: 0
+  }
+
+  let textCounter = 0;
+  let pCounter = 0;
+  var bCounter = 0;
+  let elem = "";
+
+
+
+  for (elem of root.childNodes) {
+
+    if (elem.classList) {
+
+      elem.classList.forEach(element => {
+
+        if (Object.keys(obj.classes).some(key => key === element)) {
+
+
+          obj.classes[element]++;
+        } else {
+          obj.classes[element] = 1;
+        }
+      });
+    }
+
+
+    if (elem.nodeType === 3) {
+
+      textCounter++;
+    }
+
+    if (elem.tagName === 'P') {
+      pCounter++;
+    }
+
+    if (elem.tagName === 'B') {
+      bCounter++;
+
+    }
+  }
+
+
+  obj.texts = textCounter;
+  obj.tags.P = pCounter;
+  obj.tags.B = bCounter;
+  //console.log(obj);
+
+  return obj;
+}
 export {
   createDivWithText,
   prepend,
