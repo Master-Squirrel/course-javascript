@@ -9,7 +9,7 @@ export default {
             return null;
         }
         
-        const num = Math.round((Math.random() * (array.length -1)));
+        const index = Math.round((Math.random() * (array.length -1)));
   
         return array[index];
     },
