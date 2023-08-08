@@ -81,9 +81,9 @@ function findAllPSiblings(where) {
  */
 function findError(where) {
   const result = [];
-  let child = "";
+  
 
-  for (child of where.children) {
+  for (let child of where.children) {
     result.push(child.textContent);
   }
 
@@ -103,9 +103,9 @@ function findError(where) {
    должно быть преобразовано в <div></div><p></p>
  */
 function deleteTextNodes(where) {
-  let child = "";
+  
 
-  for (child of where.childNodes) {
+  for (let child of where.childNodes) {
 
     if (child.nodeType === 3) {
       where.removeChild(child)
