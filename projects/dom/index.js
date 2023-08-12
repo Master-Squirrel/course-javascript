@@ -28,7 +28,8 @@ function createDivWithText(text) {
 
 
 function prepend(what, where) {
-  where.prepend(what)
+  // where.prepend(what) в более новых браузерах
+  where.insertBefore(what, where.firstChild);
 }
 
 /*
@@ -81,7 +82,7 @@ function findAllPSiblings(where) {
  */
 function findError(where) {
   const result = [];
-  
+
 
   for (let child of where.children) {
     result.push(child.textContent);
@@ -103,7 +104,7 @@ function findError(where) {
    должно быть преобразовано в <div></div><p></p>
  */
 function deleteTextNodes(where) {
-  
+
 
   for (let child of where.childNodes) {
 
@@ -137,58 +138,42 @@ function deleteTextNodes(where) {
  */
 function collectDOMStat(root) {
 
-  let obj = {
+  const obj = {
     tags: {},
     classes: {},
     texts: 0
   }
 
-  let textCounter = 0;
-  let pCounter = 0;
-  var bCounter = 0;
-  let elem = "";
+  function scan(root) {
 
+    for (const elem of root.childNodes) {
 
+      if (elem.nodeType === Node.TEXT_NODE) {
+        obj.texts++;
+      } else if (elem.nodeType === Node.ELEMENT_NODE) {
 
-  for (elem of root.childNodes) {
-
-    if (elem.classList) {
-
-      elem.classList.forEach(element => {
-
-        if (Object.keys(obj.classes).some(key => key === element)) {
-
-
-          obj.classes[element]++;
+        if (elem.tagName in obj.tags) {
+          obj.tags[elem.tagName]++;
         } else {
-          obj.classes[element] = 1;
+          obj.tags[elem.tagName] = 1;
         }
-      });
-    }
 
-
-    if (elem.nodeType === 3) {
-
-      textCounter++;
-    }
-
-    if (elem.tagName === 'P') {
-      pCounter++;
-    }
-
-    if (elem.tagName === 'B') {
-      bCounter++;
-
+        for (const className of elem.classList) {
+          if (className in obj.classes) {
+            obj.classes[className]++;
+          }
+          else {
+            obj.classes[className] = 1;
+          }
+        }
+      }
     }
   }
 
-
-  obj.texts = textCounter;
-  obj.tags.P = pCounter;
-  obj.tags.B = bCounter;
-  //console.log(obj);
+  scan(root)
 
   return obj;
+
 }
 export {
   createDivWithText,
