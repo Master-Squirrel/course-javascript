@@ -80,6 +80,7 @@ export default {
     return new Promise((resolve, reject) => {
       VK.api(method, params, (data) => {
         if (data.error) {
+          
           reject(data.error);
         } else {
 
@@ -94,11 +95,10 @@ export default {
       fields: ['photo_50', 'photo_100'],
       //count: 2
     };
-    console.log(params)
+    
     return this.callAPI('friends.get', params);
   },
-
-  
+ 
 
   async getFriendPhotos(id) {
     let photos = this.photoCache[id];

@@ -1,7 +1,7 @@
-import pages from './pages';
+//import pages from './pages';
 import model from './model';
 
-const place = document.querySelector('.component-photo');
+
 const link = document.querySelector('.component-header-profile-link');
 
 export default {
@@ -11,35 +11,35 @@ export default {
     },
 
     setFriendAndPhoto(friend, id, url) {
-        const img = new Image(360);
-        img.src = url
-        this.img = img
-        place.appendChild(img)
+        const photoComp = document.querySelector('.component-photo');
+        const headerPhotoComp = document.querySelector('.component-header-photo');
+        const headerNameComp = document.querySelector('.component-header-name');
 
-        console.log(friend);
-        link.textContent = `${friend.first_name} ${friend.last_name}`;
-        link.href = `https://vk.com/id${friend.id}`;
-        
-    },
-
-    removePhoto () {
-        place.removeChild(this.img);
+        headerPhotoComp.style.backgroundImage = `url('${friend.photo_50}')`;
+        headerNameComp.innerText = `${friend.first_name ?? ''} ${friend.last_name ?? ''}`;
+        photoComp.style.backgroundImage = `url('${url}')`;
     },
 
     handleEvents() {
-        document.addEventListener('touchstart', (e) => {
-            if (e.target.parentElement.classList.contains('component-photo')) {                    
-                this.removePhoto();
-                this.getNextPhoto();
-             }
-        })
 
-        document.addEventListener('mouseup', (e) => {
-            
-             if (e.target.parentElement.classList.contains('component-photo')) {                    
-                this.removePhoto();
-                this.getNextPhoto();
-             }
-        })
+        let startFrom;
+
+
+        document.querySelector('.component-photo').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startFrom = { y: e.changedTouches[0].pageY };
+        });
+
+        document.querySelector('.component-photo').addEventListener('touchend', async (e) => {
+
+            const direction = e.changedTouches[0].pageY - startFrom.y;
+
+            if (direction < 0) {
+                await this.getNextPhoto();
+            }
+
+
+        });
+
     },
 };
