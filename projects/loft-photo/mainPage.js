@@ -21,10 +21,7 @@ export default {
 
     headerPhotoComp.style.backgroundImage = `url('${friend.photo_50}')`;
     headerNameComp.innerText = `${friend.first_name ?? ''} ${friend.last_name ?? ''}`;
-    photoComp.style.backgroundImage = `url('${url}')`;
-    
-    const [user] = await model.getUsers(id);   
-    profilePage.setUser(user);
+    photoComp.style.backgroundImage = `url('${url}')`;             
   },
 
   async setAvatar() {
@@ -35,8 +32,8 @@ export default {
     document.querySelector('.component-footer-photo').addEventListener('click', async e => {
       
       const [user] = await model.getUsers(model.userID);    
+      console.log(user);
       profilePage.setUser(user);
-
       pages.openPage('profile');
     });
 
@@ -64,11 +61,13 @@ export default {
     });
 
     document.querySelector('.component-header-photo').addEventListener('click', async e=> {
-      
-      
-      
-      //profilePage.setUser(user);
-      pages.openPage('profile');
+        
+        
+        const user = await model.getUsers();
+        // console.log ('User received: ', user);
+        
+        profilePage.setUser(user[0]);
+        pages.openPage('profile');
     })
 
   },
