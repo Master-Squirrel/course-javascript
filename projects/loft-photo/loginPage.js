@@ -10,6 +10,7 @@ export default {
         await model.login();
         await model.init();
         pages.openPage('main');
+        mainPage.setAvatar();
         await mainPage.getNextPhoto();
       });
   },

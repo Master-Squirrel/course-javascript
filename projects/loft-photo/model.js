@@ -1,18 +1,5 @@
-// eslint-disable-next-line no-unused-vars
-//import photosDB from './photos.json';
-// eslint-disable-next-line no-unused-vars
-//import friendsDB from './friends.json';
-
-//import { rejects } from "assert";
-//import { resolve } from "path";
-
-//VKid 51730228
-
-
 const PERM_FRIENDS = 2;
 const PERM_PHOTOS = 4;
-
-
 
 
 export default {
@@ -30,7 +17,7 @@ export default {
     return array[index];
   },
 
- async getNextPhoto() {
+  async getNextPhoto() {
 
     const friend = this.getRandomElement(this.friends.items);
     const photos = await this.getFriendPhotos(friend.id);
@@ -40,7 +27,7 @@ export default {
 
     return { friend, id: photo.id, url: size.url };
 
-},
+  },
 
   async init() {
 
@@ -63,24 +50,25 @@ export default {
       VK.Auth.login(data => {
         if (data.session) {
 
+          this.userID = data.session.user.id
           resolve(data);
         }
         else {
           console.log(data);
           reject(data);
-          
+
         }
       }, PERM_FRIENDS | PERM_PHOTOS);
     });
   },
 
   callAPI(method, params) {
-    console.log('Call API', params);
+    //console.log('Call API', params);
     params.v = '5.131';
     return new Promise((resolve, reject) => {
       VK.api(method, params, (data) => {
         if (data.error) {
-          
+
           reject(data.error);
         } else {
 
@@ -95,10 +83,9 @@ export default {
       fields: ['photo_50', 'photo_100'],
       //count: 2
     };
-    
+
     return this.callAPI('friends.get', params);
   },
- 
 
   async getFriendPhotos(id) {
     let photos = this.photoCache[id];
@@ -120,7 +107,7 @@ export default {
 
     return this.callAPI('photos.getAll', params);
   },
-
+  
   findSize(photo) {
     const size = photo.sizes.find((size) => size.width >= 360);
 
@@ -134,5 +121,16 @@ export default {
     }
 
     return size;
-  }
+  },
+  logout() { },
+
+  async getUsers(ids = this.userID) {
+    console.log('IDS:', ids);
+    const params = {
+      fields: ['photo_50', 'photo_100'],
+      user_ids: ids,
+      name_case: 'nom'
+    };      
+    return this.callAPI('users.get', params);
+  },
 };
