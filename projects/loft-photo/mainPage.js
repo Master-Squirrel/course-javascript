@@ -26,12 +26,12 @@ export default {
 
   async setAvatar() {
 
-    const avatar = await model.getUsers(model.userID);
+    const [user] = await model.getUsers(model.userID);
 
-    document.querySelector('.component-footer-photo').style.backgroundImage = `url('${avatar[0].photo_50}')`;
+    document.querySelector('.component-footer-photo').style.backgroundImage = `url('${user.photo_50}')`;
     document.querySelector('.component-footer-photo').addEventListener('click', async e => {
       
-      const [user] = await model.getUsers(model.userID);    
+      //const [user] = await model.getUsers(model.userID);    
       console.log(user);
       profilePage.setUser(user);
       pages.openPage('profile');

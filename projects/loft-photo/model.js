@@ -16,14 +16,15 @@ export default {
 
     return array[index];
   },
-
   async getNextPhoto() {
 
     const friend = this.getRandomElement(this.friends.items);
     //console.log('current fiend',friend, friend.id);
     this.friend = friend;
 
-    const photos = await this.getFriendPhotos(friend.id);
+    const photos = await this.getFriendPhotos(friend.id).catch (e => {
+      console.log('Error with photo');
+    });
     const photo = this.getRandomElement(photos.items);
     const size = this.findSize(photo);
 
@@ -31,7 +32,6 @@ export default {
     return { friend, id: photo.id, url: size.url };
 
   },
-
   async init() {
 
     this.photoCache = {};
@@ -40,7 +40,6 @@ export default {
     return this.friends;
     //return this.callAPI('users.get', { name_case: 'gen' });
   },
-
   login() {
 
     return new Promise((resolve, reject) => {
@@ -65,7 +64,6 @@ export default {
       }, PERM_FRIENDS | PERM_PHOTOS);
     });
   },
-
   callAPI(method, params) {
     //console.log('Call API', params);
     params.v = '5.131';
@@ -81,7 +79,6 @@ export default {
       })
     })
   },
-
   getFriends() {
     const params = {
       fields: ['photo_50', 'photo_100'],
@@ -106,11 +103,11 @@ export default {
   getPhotos(owner) {
     const params = {
       owner_id: owner,
-    };
+    }
 
     return this.callAPI('photos.getAll', params);
   },
-    findSize(photo) {
+  findSize(photo) {
     const size = photo.sizes.find((size) => size.width >= 360);
 
     if (!size) {
@@ -124,15 +121,26 @@ export default {
 
     return size;
   },
-  logout() { },
+  async logout() {
 
+    return new Promise((resolve, reject) => {
+      
+      VK.Auth.revokeGrants(data => {
+          resolve(data)
+      })
+
+    })
+    //VK.Auth.logout();
+
+
+  },
   async getUsers(ids = this.friend.id) {
-   // console.log('Get Users with IDS:', ids);
+    console.log('Get Users with IDS:', ids);
     const params = {
       fields: ['photo_50', 'photo_100'],
       user_ids: ids,
       name_case: 'nom'
-    };      
+    };
     return this.callAPI('users.get', params);
   },
 };

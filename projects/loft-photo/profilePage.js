@@ -40,8 +40,8 @@ export default {
 
     })
 
-    document.querySelector('.page-profile-exit').addEventListener('click', e => {
-      model.logout();
+    document.querySelector('.page-profile-exit').addEventListener('click', async e => {
+      await model.logout();
       pages.openPage('login');
     })
 
