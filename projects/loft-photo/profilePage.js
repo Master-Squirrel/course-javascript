@@ -5,12 +5,10 @@ import pages from './pages';
 export default {
   async setUser(user) {
 
-   
-     document.querySelector('.component-user-info-photo').style.backgroundImage = `url('${user['photo_50']}')`;
-     document.querySelector('.component-user-info-name').innerText = `${user.first_name} ${user.last_name}`;
+    document.querySelector('.component-user-info-photo').style.backgroundImage = `url('${user['photo_50']}')`;
+    document.querySelector('.component-user-info-name').innerText = `${user.first_name} ${user.last_name}`;
 
     const photos = await model.getFriendPhotos(user.id);
-    
 
     document.querySelector('.component-user-photos').innerHTML = '';
 
@@ -19,7 +17,7 @@ export default {
       const img = document.createElement('div');
       img.classList.add('component-user-photo');
       img.style.backgroundImage = `url('${foto.sizes[2].url}')`;
-      
+
       img.addEventListener('click', e => {
 
         mainPage.setFriendAndPhoto(user, user.id, foto.sizes[2].url);
@@ -29,7 +27,7 @@ export default {
 
       document.querySelector('.component-user-photos').appendChild(img);
 
-     });
+    });
 
   },
   async handleEvents() {

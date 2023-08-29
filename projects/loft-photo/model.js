@@ -22,7 +22,7 @@ export default {
     //console.log('current fiend',friend, friend.id);
     this.friend = friend;
 
-    const photos = await this.getFriendPhotos(friend.id).catch (e => {
+    const photos = await this.getFriendPhotos(friend.id).catch(e => {
       console.log('Error with photo');
     });
     const photo = this.getRandomElement(photos.items);
@@ -37,7 +37,9 @@ export default {
     this.photoCache = {};
     this.friends = await this.getFriends();
 
-    return this.friends;
+    [this.me] = await this.getUsers();
+
+    //return this.friends;
     //return this.callAPI('users.get', { name_case: 'gen' });
   },
   login() {
@@ -123,24 +125,26 @@ export default {
   },
   async logout() {
 
-    return new Promise((resolve, reject) => {
-      
-      VK.Auth.revokeGrants(data => {
-          resolve(data)
-      })
-
-    })
-    //VK.Auth.logout();
-
+    return new Promise( (resolve) => VK.Auth.revokeGrants(resolve));
 
   },
-  async getUsers(ids = this.friend.id) {
-    console.log('Get Users with IDS:', ids);
+  async getUsers(ids) {
+    
     const params = {
-      fields: ['photo_50', 'photo_100'],
-      user_ids: ids,
-      name_case: 'nom'
+      fields: ['photo_50', 'photo_100'],      
     };
+
+    if (ids) {
+      params.user_ids = ids;
+    }
+
     return this.callAPI('users.get', params);
   },
+  async like(photo) { },
+
+  async photoStats(photo) { },
+
+  async getComments(photo) { },
+
+  async postComment(photo, text) { },
 };
