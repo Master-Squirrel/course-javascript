@@ -23,6 +23,7 @@ export default {
     const headerNameComp = document.querySelector('.component-header-name');
 
     this.friend = friend;
+    this.photoid = id;
 
     headerPhotoComp.style.backgroundImage = `url('${friend.photo_50}')`;
     headerNameComp.innerText = `${friend.first_name ?? ''} ${friend.last_name ?? ''}`;
@@ -76,6 +77,10 @@ export default {
       profilePage.setUser(this.friend);
       pages.openPage('profile');
     });
+
+    document.querySelector('.component-footer-container-social-likes').addEventListener('click', async e=> {
+      model.like(this.photoid);
+    })
 
   },
 };
