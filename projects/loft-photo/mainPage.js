@@ -2,7 +2,7 @@
 import model from './model';
 import profilePage from './profilePage';
 import pages from './pages';
-import commentsTemplate from './commentsTemplate.html.hbs';
+//import commentsTemplate from './commentsTemplate.html.hbs';
 
 const link = document.querySelector('.component-header-profile-link');
 
@@ -34,20 +34,21 @@ export default {
     photoComp.style.backgroundImage = `url('${url}')`;
 
     this.setLikes(photoStats);
+    this.loadComments(this.photoid);
     this.setComments(photoStats.comments);
   },
 
   async loadComments(photo) {
 
     const allComments = await model.getComments(photo);
-    
+
     const commentsContainer = document.querySelector('.component-comments-container-list');
 
     commentsContainer.innerHTML = '';
 
     for (const comment of allComments) {
 
-      commentsContainer.innerHTML += 
+      commentsContainer.innerHTML +=
 
         `<div class="component-comment">
       <div class="component-comment-photo" style="background-image: url('${comment.user.photo_50}')"></div>
@@ -135,6 +136,7 @@ export default {
     document.querySelector('.component-footer-container-social-comments').addEventListener('click', async e => {
 
       document.querySelector('.component-comments').classList.remove('hidden');
+      this.openCommentBlock = true;
 
 
     })
@@ -151,5 +153,18 @@ export default {
 
     })
 
+    document.querySelector('.page-main').addEventListener('click', e => {
+
+      console.log(e.target, e.target.classList)
+
+      const container = e.target.closest('.component-comments-container');
+
+      console.log(container, this.openCommentBlock);
+
+      if (container === null && this.openCommentBlock === true && !e.target.classList.contains('component-footer-container-social-comments')) {
+        document.querySelector('.component-comments').classList.add('hidden');
+        this.openCommentBlock = false;
+      }
+    })
   },
 };
