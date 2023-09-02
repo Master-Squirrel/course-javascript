@@ -27,7 +27,8 @@ export default {
     });
     const photo = this.getRandomElement(photos.items);
     const size = this.findSize(photo);
-
+    
+ 
 
     return { friend, id: photo.id, url: size.url };
 
@@ -60,7 +61,7 @@ export default {
           resolve(data);
         }
         else {
-          console.log(data);
+          
           reject(data);
 
         }
@@ -153,10 +154,10 @@ export default {
         return all; 
       }, [])
       .join('&');
-      console.log('Token:', this.token);
+      
     const params = {
       headers: {
-        vk_token: 'string',
+        vk_token: this.token,
       },
     };
 
@@ -164,19 +165,31 @@ export default {
       params.method = 'POST';
       params.body = JSON.stringify(body);
     }
-
-    const response = await fetch(`http://localhost:8888/loft-photo/api/?${query}`, params);
+    
+    const response = await fetch(`/loft-photo/api/?${query}`, params);
+    //console.log('Call Server', method, queryParams, response);
     return response.json();
   },
   
-  async like(photo) {    
-    const result = await this.callServer('like', {photo})
-    console.log(result);
+  async like(photoID) {    
+    return await this.callServer('like', {photo: photoID});
+    
    },
 
-  async photoStats(photo) { },
+  async photoStats(photoID) { 
+    //console.log('photoStats requested', photoID)
+    return await this.callServer('photoStats', {photo: photoID});
+    
+    
+  },
 
-  async getComments(photo) { },
+  async getComments(photoID) { 
 
-  async postComment(photo, text) { },
+    return await this.callServer('getComments', {photo: photoID});
+    
+  },
+
+  async postComment(photoID, textComment) { 
+    return await this.callServer('postComment', {photo: photoID}, {text: textComment});
+  },
 };

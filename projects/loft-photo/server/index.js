@@ -1,6 +1,6 @@
 const http = require('node:http'); 
- const https = require('node:https'); 
- const url = require('node:url'); 
+const https = require('node:https'); 
+const url = require('node:url'); 
   
  const DB = { 
      tokens: new Map(), 
@@ -18,7 +18,7 @@ const http = require('node:http');
              DB.likes.set(photoId, photoLikes); 
          } 
   
-         console.log(vkUser);
+         
 
          if (photoLikes.get(vkUser.id)) { 
              photoLikes.delete(vkUser.id); 
@@ -48,7 +48,7 @@ const http = require('node:http');
              DB.comments.set(photoId, photoComments); 
          } 
   
-         photoComments.unshift({user: vkUser, test: body.text}); 
+         photoComments.unshift({user: vkUser, text: body.text}); 
      }, 
      getComments(req, res, url) { 
          const photoId = url.searchParams.get('photo'); 
@@ -58,9 +58,9 @@ const http = require('node:http');
   
  http 
      .createServer(async (req, res) => { 
-         console.log('Create sever');
+         
          const token = req.headers['vk_token']; 
-         console.log('Request header', req.headers);
+         
 
 
          const parsed = new url.URL(req.url, 'http://localhost'); 
@@ -90,7 +90,7 @@ const http = require('node:http');
      } 
   
      return new Promise((resolve) => { 
-         let body = '{}'; 
+         let body = ''; 
          req 
              .on('data', (chunk) => { 
                  body += chunk; 

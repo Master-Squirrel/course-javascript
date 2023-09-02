@@ -2,6 +2,7 @@
 import model from './model';
 import profilePage from './profilePage';
 import pages from './pages';
+import commentsTemplate from './commentsTemplate.html.hbs';
 
 const link = document.querySelector('.component-header-profile-link');
 
@@ -10,11 +11,14 @@ const link = document.querySelector('.component-header-profile-link');
 export default {
   async getNextPhoto() {
     const { friend, id, url } = await model.getNextPhoto();
-    this.setFriendAndPhoto(friend, id, url);
+    const photoStats = await model.photoStats(id);
+    //this.photoID = id;
+
+    this.setFriendAndPhoto(friend, id, url, photoStats);
 
   },
 
-  async setFriendAndPhoto(friend, id, url) {
+  async setFriendAndPhoto(friend, id, url, photoStats) {
 
     const stats = "";
 
@@ -28,13 +32,57 @@ export default {
     headerPhotoComp.style.backgroundImage = `url('${friend.photo_50}')`;
     headerNameComp.innerText = `${friend.first_name ?? ''} ${friend.last_name ?? ''}`;
     photoComp.style.backgroundImage = `url('${url}')`;
+
+    this.setLikes(photoStats);
+    this.setComments(photoStats.comments);
   },
 
-  async loadComments(photo) { },
+  async loadComments(photo) {
 
-  setLikes(total, liked) { },
+    const allComments = await model.getComments(photo);
+    
+    const commentsContainer = document.querySelector('.component-comments-container-list');
 
-  setComments(total) { },
+    commentsContainer.innerHTML = '';
+
+    for (const comment of allComments) {
+
+      commentsContainer.innerHTML += 
+
+        `<div class="component-comment">
+      <div class="component-comment-photo" style="background-image: url('${comment.user.photo_50}')"></div>
+      <div class="component-comment-content">
+        <div class="component-comment-name">${comment.user.first_name}</div>
+        <div class="component-comment-text">${comment.text}</div>
+      </div>
+    </div>`;
+
+    }
+
+    this.setComments(allComments.length);
+
+  },
+
+  setLikes(photoStats) {
+    console.log('Setlikes:', photoStats);
+    const likeContainer = document.querySelector('.component-footer-container-social-likes');
+    likeContainer.innerText = photoStats.likes;
+
+    if (photoStats.liked) {
+      likeContainer.classList.add('liked');
+    } else {
+      likeContainer.classList.remove('liked');
+    }
+
+  },
+
+  setComments(total) {
+
+    const commentsContainer = document.querySelector('.component-footer-container-social-comments');
+    commentsContainer.innerText = total;
+
+  },
+
 
 
   async setAvatar() {
@@ -78,8 +126,29 @@ export default {
       pages.openPage('profile');
     });
 
-    document.querySelector('.component-footer-container-social-likes').addEventListener('click', async e=> {
-      model.like(this.photoid);
+    document.querySelector('.component-footer-container-social-likes').addEventListener('click', async e => {
+      const likes = await model.like(this.photoid);
+
+      this.setLikes(likes);
+    })
+
+    document.querySelector('.component-footer-container-social-comments').addEventListener('click', async e => {
+
+      document.querySelector('.component-comments').classList.remove('hidden');
+
+
+    })
+
+    document.querySelector('.component-comments-container-form-send').addEventListener('click', async e => {
+
+      const comment = document.querySelector('.component-comments-container-form-input');
+
+      if (comment.value.trim()) {
+        await model.postComment(this.photoid, comment.value.trim());
+        await this.loadComments(this.photoid);
+        comment.value = '';
+      }
+
     })
 
   },
