@@ -13,14 +13,20 @@
 
 <script language="javascript">
 
-function fn1() {
-  
-    const fn2 = () => console.log(arguments);
 
-    fn2(...arguments);
+    console.log('aaa')
+
+forEach([1, 2, 3], (el) => console.log(el)); // выведет каждый элемент массива
+
+function forEach(array, func) {
+
+ for (let i = 0; i < array.length; i++) {
+  func(array[i], i,  array)
+ }
+
 }
 
-fn1(1, 2, 3);
+
 
 </script>
 
